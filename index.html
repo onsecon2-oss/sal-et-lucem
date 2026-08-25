@@ -119,10 +119,15 @@ nav.site-nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);
 .loc-info dl{display:grid;grid-template-columns:88px 1fr;gap:1rem;font-size:.9rem;}
 .loc-info dt{color:var(--gold-light);}
 .loc-info dd{color:var(--muted);}
-.loc-map{aspect-ratio:4/3;border:1px solid var(--line);overflow:hidden;position:relative;}
-.loc-map iframe{width:100%;height:100%;border:0;display:block;}
+.loc-map{aspect-ratio:4/3;border:1px solid var(--line);overflow:hidden;position:relative;display:block;background:#f7f6f3;}
+.loc-map:hover .loc-map-svg{transform:scale(1.03);}
+.loc-map-svg{width:100%;height:100%;display:block;transition:transform .5s ease;}
+.loc-map-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;background:rgba(255,255,255,0);transition:background .25s ease;}
+.loc-map:hover .loc-map-overlay{background:rgba(255,255,255,.06);}
+.loc-map-pin{width:34px;height:34px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.18));}
+.loc-map-label{font-size:.82rem;font-weight:700;color:var(--ink);background:#fff;padding:.4rem .9rem;border:1px solid var(--ink);}
 .loc-map-btn{position:absolute;bottom:.9rem;right:.9rem;z-index:2;font-size:.72rem;background:#fff;padding:.5rem 1rem;border:1px solid var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.08);}
-.loc-map-btn:hover{background:var(--ink);color:#fff;}
+.loc-map:hover .loc-map-btn{background:var(--ink);color:#fff;}
 @media(max-width:760px){.loc-grid{grid-template-columns:1fr;}}
 
 footer{padding:3.2rem 0 2rem;border-top:1px solid var(--line);}
@@ -335,10 +340,27 @@ footer{padding:3.2rem 0 2rem;border-top:1px solid var(--line);}
           <dt>SNS</dt><dd><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener" style="text-decoration:underline;">@gallery_lightsalt</a></dd>
         </dl>
       </div>
-      <div class="loc-map">
-        <iframe src="https://map.kakao.com/link/search/%EC%97%AC%EC%88%98%EC%8B%9C%20%EC%8B%A0%EC%9B%94%EB%A1%9C%20112%20%EB%A7%88%EB%A6%B0%EA%B8%80%EB%A1%9C%EB%A6%AC%EB%B9%8C%EB%94%A9" loading="lazy" title="카카오맵 — 갤러리 빛과소금 위치"></iframe>
-        <a href="https://map.kakao.com/link/search/%EC%97%AC%EC%88%98%EC%8B%9C%20%EC%8B%A0%EC%9B%94%EB%A1%9C%20112%20%EB%A7%88%EB%A6%B0%EA%B8%80%EB%A1%9C%EB%A6%AC%EB%B9%8C%EB%94%A9" target="_blank" rel="noopener" class="loc-map-btn">크게 보기 →</a>
-      </div>
+      <a class="loc-map" href="https://map.kakao.com/link/search/%EC%97%AC%EC%88%98%EC%8B%9C%20%EC%8B%A0%EC%9B%94%EB%A1%9C%20112%20%EB%A7%88%EB%A6%B0%EA%B8%80%EB%A1%9C%EB%A6%AC%EB%B9%8C%EB%94%A9" target="_blank" rel="noopener" aria-label="카카오맵에서 갤러리 빛과소금 위치 보기">
+        <svg class="loc-map-svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#f7f6f3"/>
+          <g stroke="#e2ddd0" stroke-width="2" fill="none">
+            <path d="M0 60 H400"/><path d="M0 130 H400"/><path d="M0 200 H400"/><path d="M0 250 H400"/>
+            <path d="M70 0 V300"/><path d="M160 0 V300"/><path d="M250 0 V300"/><path d="M330 0 V300"/>
+          </g>
+          <path d="M0 110 C120 90 180 170 260 150 S360 90 400 110" stroke="#d9cfa8" stroke-width="6" fill="none" opacity=".7"/>
+          <path d="M40 0 C60 90 30 180 90 300" stroke="#d9cfa8" stroke-width="5" fill="none" opacity=".55"/>
+          <circle cx="200" cy="150" r="70" fill="#eee7d4" opacity=".5"/>
+          <g transform="translate(200,140)">
+            <circle r="9" fill="#b6863a"/>
+            <path d="M0 9 C -16 30 -16 46 0 62 C 16 46 16 30 0 9 Z" fill="#b6863a"/>
+            <circle r="4" fill="#fff"/>
+          </g>
+        </svg>
+        <div class="loc-map-overlay">
+          <span class="loc-map-label">📍 여수시 신월로 112 · 지도에서 보기</span>
+        </div>
+        <span class="loc-map-btn">지도 열기 →</span>
+      </a>
     </div>
   </div>
 </section>
