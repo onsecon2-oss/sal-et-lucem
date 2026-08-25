@@ -10,130 +10,153 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 :root{
-  --bg:#0d0c0a;--surface:#151310;--card:#1a1712;
-  --border:rgba(201,169,97,.16);--text:#f3ede1;--muted:rgba(243,237,225,.56);
-  --gold:#c9a961;--gold-light:#e8d5a3;--salt:#f3ede1;
+  --bg:#ffffff;--ink:#111111;--muted:#6b6b6b;--line:#dcdcdc;
+  --gold:#b6863a;--gold-light:#8a6a2a;
 }
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;line-height:1.6;}
 a{color:inherit;text-decoration:none;}
 .serif{font-family:'Playfair Display','Noto Serif KR',serif;}
 .container{max-width:1160px;margin:0 auto;padding:0 6vw;}
-.label{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:1rem;}
+.label{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-light);font-weight:600;margin-bottom:1rem;}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;background:rgba(13,12,10,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);opacity:0;transform:translateY(-8px);transition:all .6s ease;pointer-events:none;}
-nav.show{opacity:1;transform:translateY(0);pointer-events:auto;}
-.nav-logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;letter-spacing:.04em;color:var(--salt);}
-.nav-logo em{font-style:normal;color:var(--gold);}
-.nav-links{display:flex;gap:2.2rem;list-style:none;}
-.nav-links a{font-size:.82rem;letter-spacing:.02em;color:var(--muted);transition:color .2s;}
-.nav-links a:hover{color:var(--gold-light);}
-.nav-cta{font-size:.78rem;letter-spacing:.05em;padding:.6rem 1.3rem;border:1px solid var(--gold);color:var(--gold-light);border-radius:2px;transition:all .25s;}
-.nav-cta:hover{background:var(--gold);color:#1a1712;}
+/* CORNER NAV (fixed, always visible) */
+.corner-nav{position:fixed;inset:0;z-index:400;pointer-events:none;padding:2.4rem 2.8rem;}
+.corner-nav a,.corner-nav span{pointer-events:auto;}
+.cn-item{position:absolute;font-size:.85rem;letter-spacing:.02em;color:var(--ink);text-transform:lowercase;}
+.cn-tl{top:2.4rem;left:2.8rem;}
+.cn-tr{top:2.4rem;right:2.8rem;}
+.cn-bl{bottom:2.4rem;left:2.8rem;}
+.cn-br{bottom:2.4rem;right:2.8rem;}
+.cn-item.active{text-decoration:underline;text-underline-offset:5px;}
+.cn-item:hover{color:var(--gold-light);}
+
+/* HERO / INTRO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;}
+.hero-inner{display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
+.hero-eyebrow{font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-light);}
+.hero-title{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(2.6rem,9vw,6.6rem);letter-spacing:.05em;line-height:1;
+  background:linear-gradient(100deg,#1a1a1a 0%,#8a6a2a 35%,#c9a961 55%,#1a1a1a 80%);
+  background-size:220% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:floatText 5s ease-in-out infinite, shimmer 7s linear infinite;
+}
+@keyframes floatText{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+@keyframes shimmer{0%{background-position:0% 50%;}100%{background-position:220% 50%;}}
+.hero-sub{font-size:.9rem;color:var(--muted);letter-spacing:.06em;}
+.hero-sub strong{color:var(--ink);font-weight:700;}
+.enter-btn{margin-top:1.6rem;font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;padding:.9rem 2.6rem;border:1px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer;transition:all .3s ease;}
+.enter-btn:hover{background:var(--ink);color:#fff;}
+#introOverlay{position:fixed;inset:0;z-index:900;background:#fff;display:flex;align-items:center;justify-content:center;transition:opacity .8s ease;}
+#introOverlay.hide{opacity:0;pointer-events:none;}
+
+/* MAIN CONTENT (revealed after enter) */
+#mainContent{opacity:0;}
+#mainContent.show{opacity:1;}
+
+nav.site-nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:1.2rem 6vw;}
+.nav-logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;}
+.nav-links{display:flex;gap:2.1rem;list-style:none;}
+.nav-links a{font-size:.8rem;color:var(--muted);}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{font-size:.76rem;letter-spacing:.05em;padding:.55rem 1.2rem;border:1px solid var(--ink);}
+.nav-cta:hover{background:var(--ink);color:#fff;}
 @media(max-width:860px){.nav-links{display:none;}}
 
-/* HERO */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background:
-  radial-gradient(ellipse 70% 55% at 50% 30%, rgba(201,169,97,.10) 0%, transparent 65%),
-  radial-gradient(ellipse 90% 70% at 50% 100%, rgba(201,169,97,.06) 0%, transparent 60%);}
-.hero::after{content:'';position:absolute;inset:0;background-image:
-  repeating-linear-gradient(115deg, rgba(255,255,255,.015) 0px, rgba(255,255,255,.015) 1px, transparent 1px, transparent 90px);}
-.hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:1.6rem;padding:0 5vw;}
-.hero-eyebrow{font-size:.72rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);}
-.hero-title{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(3.2rem,10vw,7.5rem);letter-spacing:.03em;line-height:1;background:linear-gradient(180deg,#f3ede1 0%,#e8d5a3 45%,#c9a961 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-.hero-sub{font-family:'Noto Serif KR',serif;font-size:1.05rem;color:var(--muted);letter-spacing:.03em;}
-.hero-sub strong{color:var(--salt);font-weight:600;}
-.hero-tagline{font-size:.85rem;color:var(--muted);max-width:460px;line-height:1.8;margin-top:.4rem;}
-.hero-cta{display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center;margin-top:1rem;}
-.btn{font-size:.8rem;letter-spacing:.08em;padding:.9rem 2rem;border-radius:2px;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;}
-.btn-gold{background:var(--gold);color:#1a1712;font-weight:700;}
-.btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);}
-.btn-outline{border:1px solid var(--border);color:var(--muted);}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold-light);}
-.hero-scroll{position:absolute;bottom:2.4rem;left:50%;transform:translateX(-50%);font-size:.68rem;letter-spacing:.3em;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:.6rem;text-transform:uppercase;}
-.hero-scroll::after{content:'';width:1px;height:34px;background:linear-gradient(180deg,var(--gold),transparent);animation:scrollLine 1.8s ease-in-out infinite;}
-@keyframes scrollLine{0%{opacity:0;transform:scaleY(0);transform-origin:top;}50%{opacity:1;transform:scaleY(1);transform-origin:top;}100%{opacity:0;transform:scaleY(1);transform-origin:bottom;}}
-
-/* SECTION SHARED */
-.sec{padding:7rem 0;}
-.sec.alt{background:var(--surface);}
-.sec-head{max-width:640px;margin-bottom:3.2rem;}
-.heading{font-family:'Playfair Display','Noto Serif KR',serif;font-weight:700;font-size:clamp(2rem,4.2vw,2.9rem);color:var(--salt);line-height:1.25;}
-.heading em{font-style:italic;color:var(--gold);}
-.sec-desc{color:var(--muted);font-size:.95rem;margin-top:1rem;line-height:1.85;max-width:560px;}
+.sec{padding:6.5rem 0;}
+.sec.alt{background:#fafafa;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.sec-head{max-width:640px;margin-bottom:3rem;}
+.heading{font-family:'Playfair Display','Noto Serif KR',serif;font-weight:700;font-size:clamp(1.9rem,4vw,2.7rem);line-height:1.3;}
+.heading em{font-style:italic;color:var(--gold-light);}
+.sec-desc{color:var(--muted);font-size:.94rem;margin-top:1rem;line-height:1.85;max-width:560px;}
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
-.about-visual{aspect-ratio:4/5;border-radius:4px;background:linear-gradient(155deg,#1c1810,#0d0c0a 60%);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.about-visual::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%, rgba(201,169,97,.18), transparent 55%);}
-.about-visual-mark{font-family:'Playfair Display',serif;font-size:5.5rem;color:var(--gold);opacity:.85;position:relative;z-index:1;}
+.about-visual{aspect-ratio:4/5;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
+.about-visual-mark{font-family:'Playfair Display',serif;font-size:5rem;color:var(--ink);}
 .about-facts{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:2.2rem;}
-.fact{border-top:1px solid var(--border);padding-top:.9rem;}
-.fact-n{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold-light);}
+.fact{border-top:1px solid var(--line);padding-top:.9rem;}
+.fact-n{font-family:'Playfair Display',serif;font-size:1.5rem;}
 .fact-l{font-size:.76rem;color:var(--muted);margin-top:.3rem;}
 
-/* EXHIBITIONS / PERFORMANCES */
+/* PROGRAM PREVIEW → link to exhibition.html */
 .ex-list{display:flex;flex-direction:column;}
-.ex-item{display:grid;grid-template-columns:120px 1fr auto;gap:2rem;align-items:center;padding:2rem 0;border-top:1px solid var(--border);transition:background .25s;}
-.ex-item:last-child{border-bottom:1px solid var(--border);}
-.ex-item:hover{background:rgba(201,169,97,.035);}
-.ex-date{font-family:'Playfair Display',serif;color:var(--gold);}
-.ex-date .d{font-size:1.9rem;font-weight:700;line-height:1;}
-.ex-date .m{font-size:.75rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-top:.3rem;}
-.ex-mid{min-width:0;}
-.ex-tag{display:inline-block;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:.2rem .6rem;border-radius:20px;margin-bottom:.6rem;}
-.ex-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:1.15rem;color:var(--salt);margin-bottom:.4rem;}
-.ex-desc{font-size:.83rem;color:var(--muted);line-height:1.7;max-width:560px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.ex-link{font-size:.78rem;color:var(--gold-light);white-space:nowrap;border:1px solid var(--border);padding:.6rem 1.1rem;border-radius:2px;transition:all .2s;}
-.ex-link:hover{border-color:var(--gold);background:rgba(201,169,97,.08);}
+.ex-item{display:grid;grid-template-columns:120px 1fr auto;gap:2rem;align-items:center;padding:1.9rem 0;border-top:1px solid var(--line);}
+.ex-item:last-child{border-bottom:1px solid var(--line);}
+.ex-date .d{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;line-height:1;}
+.ex-date .m{font-size:.72rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-top:.25rem;}
+.ex-tag{display:inline-block;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);padding:.2rem .6rem;margin-bottom:.55rem;color:var(--gold-light);}
+.ex-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:1.08rem;margin-bottom:.35rem;}
+.ex-desc{font-size:.82rem;color:var(--muted);line-height:1.7;max-width:560px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ex-link{font-size:.76rem;white-space:nowrap;border:1px solid var(--ink);padding:.55rem 1.05rem;transition:all .2s;}
+.ex-link:hover{background:var(--ink);color:#fff;}
 @media(max-width:760px){.ex-item{grid-template-columns:70px 1fr;}.ex-link{grid-column:1/-1;justify-self:start;}}
 
-/* BOARD (게시판) */
-.board{border:1px solid var(--border);border-radius:4px;overflow:hidden;}
-.board-row{display:grid;grid-template-columns:70px 1fr 130px 90px;gap:1rem;align-items:center;padding:1.15rem 1.6rem;border-bottom:1px solid var(--border);font-size:.86rem;}
+/* BOARD */
+.board{border:1px solid var(--line);}
+.board-row{display:grid;grid-template-columns:70px 1fr 130px 90px;gap:1rem;align-items:center;padding:1.1rem 1.6rem;border-bottom:1px solid var(--line);font-size:.85rem;}
 .board-row:last-child{border-bottom:none;}
-.board-row.head{background:rgba(201,169,97,.06);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+.board-row.head{background:#f4f4f4;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;}
 .board-no{color:var(--muted);text-align:center;}
-.board-title{color:var(--salt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.board-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .board-title a:hover{color:var(--gold-light);}
-.board-badge{display:inline-block;font-size:.62rem;background:var(--gold);color:#1a1712;padding:.1rem .45rem;border-radius:3px;margin-right:.5rem;font-weight:700;vertical-align:middle;}
-.board-date{color:var(--muted);font-size:.78rem;text-align:center;}
-.board-cat{color:var(--muted);font-size:.78rem;text-align:center;}
+.board-badge{display:inline-block;font-size:.6rem;background:var(--ink);color:#fff;padding:.1rem .45rem;margin-right:.5rem;font-weight:700;vertical-align:middle;}
+.board-date,.board-cat{color:var(--muted);font-size:.78rem;text-align:center;}
 @media(max-width:640px){.board-row{grid-template-columns:40px 1fr 70px;}.board-cat{display:none;}}
 
 /* RENTAL */
-.rental-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:3rem;display:grid;grid-template-columns:1fr auto;gap:2.5rem;align-items:center;}
-.rental-list{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-top:1.2rem;font-size:.86rem;color:var(--muted);}
-.rental-list li::before{content:'—';color:var(--gold);margin-right:.6rem;}
-@media(max-width:760px){.rental-card{grid-template-columns:1fr;text-align:left;}}
+.rental-card{border:1px solid var(--line);padding:3rem;display:grid;grid-template-columns:1fr auto;gap:2.5rem;align-items:center;}
+.rental-list{list-style:none;display:flex;flex-direction:column;gap:.65rem;margin-top:1.1rem;font-size:.85rem;color:var(--muted);}
+.rental-list li::before{content:'—';color:var(--gold-light);margin-right:.6rem;}
+.btn{font-size:.78rem;letter-spacing:.06em;padding:.85rem 1.8rem;display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--ink);}
+.btn:hover{background:var(--ink);color:#fff;}
+@media(max-width:760px){.rental-card{grid-template-columns:1fr;}}
 
 /* LOCATION */
 .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
-.loc-info dl{display:grid;grid-template-columns:88px 1fr;gap:1rem 1rem;font-size:.9rem;}
-.loc-info dt{color:var(--gold);letter-spacing:.05em;}
+.loc-info dl{display:grid;grid-template-columns:88px 1fr;gap:1rem;font-size:.9rem;}
+.loc-info dt{color:var(--gold-light);}
 .loc-info dd{color:var(--muted);}
-.loc-map{aspect-ratio:4/3;border-radius:4px;border:1px solid var(--border);background:linear-gradient(155deg,#1c1810,#0d0c0a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(--muted);font-size:.85rem;text-align:center;padding:2rem;}
+.loc-map{aspect-ratio:4/3;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(--muted);font-size:.85rem;text-align:center;padding:2rem;}
 @media(max-width:760px){.loc-grid{grid-template-columns:1fr;}}
 
-/* FOOTER */
-footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
+footer{padding:3.2rem 0 2rem;border-top:1px solid var(--line);}
 .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
-.footer-logo{font-family:'Playfair Display',serif;font-weight:700;color:var(--gold-light);font-size:1.05rem;}
+.footer-logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;}
 .footer-links{display:flex;gap:1.6rem;font-size:.8rem;color:var(--muted);}
-.footer-links a:hover{color:var(--gold-light);}
-.footer-copy{font-size:.72rem;color:rgba(243,237,225,.35);margin-top:1.6rem;}
+.footer-links a:hover{color:var(--ink);}
+.footer-copy{font-size:.72rem;color:#999;margin-top:1.5rem;}
 
-.r{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;}
+.r{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;}
 .r.in{opacity:1;transform:translateY(0);}
 </style>
 </head>
 <body>
 
-<nav id="mainNav">
-  <a class="nav-logo" href="#hero">Sal et <em>Lucem</em></a>
+<div class="corner-nav">
+  <a class="cn-item cn-tl active" href="exhibition.html">exhibition</a>
+  <a class="cn-item cn-tr" href="#program">program</a>
+  <a class="cn-item cn-bl" href="#board">news</a>
+  <span class="cn-item cn-br">home</span>
+</div>
+
+<!-- INTRO -->
+<div id="introOverlay">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Gallery Light &amp; Salt · 여수 웅천동</p>
+    <h1 class="hero-title">SAL ET LUCEM</h1>
+    <p class="hero-sub">갤러리 <strong>빛과소금</strong></p>
+    <button class="enter-btn" id="enterBtn">Enter</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent">
+
+<nav class="site-nav">
+  <a class="nav-logo" href="#hero">Sal et Lucem</a>
   <ul class="nav-links">
     <li><a href="#about">소개</a></li>
+    <li><a href="exhibition.html">전시정보</a></li>
     <li><a href="#program">전시·공연</a></li>
     <li><a href="#board">소식</a></li>
     <li><a href="#rental">대관안내</a></li>
@@ -141,21 +164,6 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
   </ul>
   <a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener" class="nav-cta">인스타그램</a>
 </nav>
-
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-inner">
-    <p class="hero-eyebrow">Gallery Light &amp; Salt · 여수 웅천동</p>
-    <h1 class="hero-title">Sal et Lucem</h1>
-    <p class="hero-sub">갤러리 <strong>빛과소금</strong></p>
-    <p class="hero-tagline">전시와 공연이 함께 머무는 복합문화공간.<br>빛(Lux)이 작품을 비추고, 소금(Sal)이 삶에 스미듯 —<br>예술이 일상 속 깊이 자리하기를 바라는 마음으로.</p>
-    <div class="hero-cta">
-      <a href="#program" class="btn btn-gold">전시·공연 보기</a>
-      <a href="#location" class="btn btn-outline">오시는 길</a>
-    </div>
-  </div>
-  <div class="hero-scroll">Scroll</div>
-</section>
 
 <!-- ABOUT -->
 <section class="sec" id="about">
@@ -165,7 +173,7 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
         <p class="label">About</p>
         <h2 class="heading">전시와 공연이<br>공존하는 곳, <em>Sal et Lucem</em></h2>
         <p class="sec-desc">
-          갤러리 빛과소금은 여수 웅천동에 자리한 복합문화공간입니다. 회화·도예·사진 등 다양한 장르의 전시와, 자체 앙상블 <strong style="color:var(--gold-light)">Sal et Lucem</strong>이 선보이는 클래식 공연이 한 공간에서 만납니다.
+          갤러리 빛과소금은 여수 웅천동에 자리한 복합문화공간입니다. 회화·도예·사진 등 다양한 장르의 전시와, 자체 앙상블 <strong>Sal et Lucem</strong>이 선보이는 클래식 공연이 한 공간에서 만납니다.
           "너희는 세상의 소금이요 빛이라"는 말처럼, 예술이 삶 속에 스며들어 은은하게 세상을 밝히기를 바라는 마음을 담았습니다.
         </p>
         <div class="about-facts">
@@ -182,71 +190,51 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
   </div>
 </section>
 
-<!-- EXHIBITIONS / PERFORMANCES -->
+<!-- PROGRAM PREVIEW -->
 <section class="sec alt" id="program">
   <div class="container">
     <div class="sec-head r">
       <p class="label">Exhibitions &amp; Performances</p>
       <h2 class="heading">최근 전시 &amp; 공연</h2>
-      <p class="sec-desc">인스타그램 <a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener" style="color:var(--gold-light);text-decoration:underline;">@gallery_lightsalt</a>에 게시된 최근 소식입니다. 예약 및 상세 안내는 인스타그램 프로필 링크를 확인해주세요.</p>
+      <p class="sec-desc">전체 전시 일정과 상세 정보는 <a href="exhibition.html" style="text-decoration:underline;color:var(--gold-light);">전시정보 페이지</a>에서 확인하실 수 있습니다.</p>
     </div>
     <div class="ex-list r">
 
       <div class="ex-item">
         <div class="ex-date"><div class="d">20</div><div class="m">Aug 2026</div></div>
         <div class="ex-mid">
-          <span class="ex-tag">🎹 공연</span>
+          <span class="ex-tag">공연</span>
           <div class="ex-title">네 개의 손, 하나의 음악 — 포핸즈 피아노 콘서트</div>
-          <div class="ex-desc">라라피아노 주관, 한 대의 피아노 앞에 마주 앉은 두 사람이 호흡을 맞춰 만들어가는 특별한 무대. 아이들의 순수한 열정과 하모니를 만나보세요.</div>
+          <div class="ex-desc">라라피아노 주관, 한 대의 피아노 앞에 마주 앉은 두 사람이 호흡을 맞춰 만들어가는 특별한 무대.</div>
         </div>
-        <a class="ex-link" href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">인스타그램에서 보기 →</a>
-      </div>
-
-      <div class="ex-item">
-        <div class="ex-date"><div class="d">20</div><div class="m">Aug 2026</div></div>
-        <div class="ex-mid">
-          <span class="ex-tag">🎶 공연</span>
-          <div class="ex-title">차정현 플루트 독주회</div>
-          <div class="ex-desc">순천만 음악예술 콩쿠르, 서울 SSO 국제장학콩쿠르 등에서 실력을 인정받은 젊은 플루티스트 차정현이 헨델, 하이든 등의 작품을 선보입니다.</div>
-        </div>
-        <a class="ex-link" href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">인스타그램에서 보기 →</a>
+        <a class="ex-link" href="exhibition.html">자세히 보기 →</a>
       </div>
 
       <div class="ex-item">
         <div class="ex-date"><div class="d">16</div><div class="m">Aug 2026</div></div>
         <div class="ex-mid">
-          <span class="ex-tag">🏺 전시</span>
+          <span class="ex-tag">전시</span>
           <div class="ex-title">노시준 도예작가 개인전</div>
-          <div class="ex-desc">흙이라는 하나의 재료가 만들어내는 다양한 형태와 감성. 입체 도자 작품과 평면 작업이 마주하며 만들어내는 새로운 풍경을 일주일간 선보입니다.</div>
+          <div class="ex-desc">흙이라는 하나의 재료가 만들어내는 다양한 형태와 감성을 담은 일주일간의 초대전.</div>
         </div>
-        <a class="ex-link" href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">인스타그램에서 보기 →</a>
-      </div>
-
-      <div class="ex-item">
-        <div class="ex-date"><div class="d">16</div><div class="m">Aug 2026</div></div>
-        <div class="ex-mid">
-          <span class="ex-tag">🎻 공연</span>
-          <div class="ex-title">앙상블 Sal et Lucem — '2026 파동 시리즈' 세 번째 이야기</div>
-          <div class="ex-desc">갤러리의 상주 앙상블 Sal et Lucem이 선보이는 연중 기획 공연. 악기와 노래가 교차하는 특별한 무대로 관객을 초대합니다. (예약 필수)</div>
-        </div>
-        <a class="ex-link" href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">인스타그램에서 보기 →</a>
+        <a class="ex-link" href="exhibition.html">자세히 보기 →</a>
       </div>
 
       <div class="ex-item">
         <div class="ex-date"><div class="d">01</div><div class="m">Aug 2026</div></div>
         <div class="ex-mid">
-          <span class="ex-tag">🎨 전시</span>
+          <span class="ex-tag">전시</span>
           <div class="ex-title">"Floating Scenery" 이대형 초대 개인전</div>
-          <div class="ex-desc">미국 캘리포니아에서 활동 중인 이대형 작가의 초대 개인전. 2주간 진행되며 한여름의 더위를 잊게 할 시원한 풍경과 깊은 감성을 선사합니다. (8.1 – 8.15)</div>
+          <div class="ex-desc">미국 캘리포니아에서 활동 중인 이대형 작가의 초대 개인전. 시원한 풍경과 깊은 감성을 선사합니다.</div>
         </div>
-        <a class="ex-link" href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">인스타그램에서 보기 →</a>
+        <a class="ex-link" href="exhibition.html">자세히 보기 →</a>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- BOARD (게시판) -->
+<!-- BOARD -->
 <section class="sec" id="board">
   <div class="container">
     <div class="sec-head r">
@@ -255,38 +243,31 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
       <p class="sec-desc">전시·공연 예약, 대관, 공지사항을 안내해드립니다.</p>
     </div>
     <div class="board r">
-      <div class="board-row head">
-        <div>번호</div><div>제목</div><div>분류</div><div>날짜</div>
-      </div>
+      <div class="board-row head"><div>번호</div><div>제목</div><div>분류</div><div>날짜</div></div>
       <div class="board-row">
         <div class="board-no">5</div>
-        <div class="board-title"><span class="board-badge">NEW</span><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">네 개의 손, 하나의 음악 — 포핸즈 피아노 콘서트 예약 안내</a></div>
-        <div class="board-cat">공연</div>
-        <div class="board-date">2026.08.20</div>
+        <div class="board-title"><span class="board-badge">NEW</span><a href="exhibition.html">네 개의 손, 하나의 음악 — 포핸즈 피아노 콘서트 예약 안내</a></div>
+        <div class="board-cat">공연</div><div class="board-date">2026.08.20</div>
       </div>
       <div class="board-row">
         <div class="board-no">4</div>
-        <div class="board-title"><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">차정현 플루트 독주회 안내</a></div>
-        <div class="board-cat">공연</div>
-        <div class="board-date">2026.08.20</div>
+        <div class="board-title"><a href="exhibition.html">차정현 플루트 독주회 안내</a></div>
+        <div class="board-cat">공연</div><div class="board-date">2026.08.20</div>
       </div>
       <div class="board-row">
         <div class="board-no">3</div>
-        <div class="board-title"><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">노시준 도예작가 개인전 오픈</a></div>
-        <div class="board-cat">전시</div>
-        <div class="board-date">2026.08.16</div>
+        <div class="board-title"><a href="exhibition.html">노시준 도예작가 개인전 오픈</a></div>
+        <div class="board-cat">전시</div><div class="board-date">2026.08.16</div>
       </div>
       <div class="board-row">
         <div class="board-no">2</div>
-        <div class="board-title"><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">'2026 파동 시리즈' 세 번째 이야기 예약 오픈 (선착순 100명)</a></div>
-        <div class="board-cat">공연</div>
-        <div class="board-date">2026.08.16</div>
+        <div class="board-title"><a href="exhibition.html">'2026 파동 시리즈' 세 번째 이야기 예약 오픈 (선착순 100명)</a></div>
+        <div class="board-cat">공연</div><div class="board-date">2026.08.16</div>
       </div>
       <div class="board-row">
         <div class="board-no">1</div>
-        <div class="board-title"><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">"Floating Scenery" 이대형 초대 개인전 오픈</a></div>
-        <div class="board-cat">전시</div>
-        <div class="board-date">2026.08.01</div>
+        <div class="board-title"><a href="exhibition.html">"Floating Scenery" 이대형 초대 개인전 오픈</a></div>
+        <div class="board-cat">전시</div><div class="board-date">2026.08.01</div>
       </div>
     </div>
   </div>
@@ -298,7 +279,7 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
     <div class="rental-card r">
       <div>
         <p class="label">Space Rental</p>
-        <h2 class="heading" style="font-size:clamp(1.6rem,3vw,2.1rem);">전시장 대관 안내</h2>
+        <h2 class="heading" style="font-size:clamp(1.5rem,3vw,2rem);">전시장 대관 안내</h2>
         <p class="sec-desc" style="margin-top:.8rem;">전시, 공연, 워크숍 등 다양한 목적으로 갤러리 빛과소금의 공간을 대관하실 수 있습니다.</p>
         <ul class="rental-list">
           <li>전시 / 공연 / 세미나 / 촬영 대관 가능</li>
@@ -306,7 +287,7 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
           <li>대관 문의는 카카오톡 채널로 접수해주세요</li>
         </ul>
       </div>
-      <a href="https://pf.kakao.com/_EzjuX" target="_blank" rel="noopener" class="btn btn-gold">대관 문의하기 →</a>
+      <a href="https://pf.kakao.com/_EzjuX" target="_blank" rel="noopener" class="btn">대관 문의하기 →</a>
     </div>
   </div>
 </section>
@@ -321,16 +302,16 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
     <div class="loc-grid r">
       <div class="loc-info">
         <dl>
-          <dt>주소</dt><dd>전라남도 여수시 웅천동 일대<br><span style="font-size:.78rem;opacity:.7;">(정확한 지번·건물명은 인스타그램 프로필 또는 카카오채널에서 확인해주세요)</span></dd>
+          <dt>주소</dt><dd>전라남도 여수시 웅천동 일대<br><span style="font-size:.78rem;opacity:.7;">(정확한 지번·건물명은 인스타그램 또는 카카오채널에서 확인해주세요)</span></dd>
           <dt>운영시간</dt><dd>화 – 토 10:00 – 18:00<br>일요일 14:30 – 18:00<br>월요일 정기휴무</dd>
-          <dt>문의</dt><dd><a href="https://pf.kakao.com/_EzjuX" target="_blank" rel="noopener" style="color:var(--gold-light);text-decoration:underline;">카카오톡 채널 문의</a></dd>
-          <dt>SNS</dt><dd><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener" style="color:var(--gold-light);text-decoration:underline;">@gallery_lightsalt</a></dd>
+          <dt>문의</dt><dd><a href="https://pf.kakao.com/_EzjuX" target="_blank" rel="noopener" style="text-decoration:underline;">카카오톡 채널 문의</a></dd>
+          <dt>SNS</dt><dd><a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener" style="text-decoration:underline;">@gallery_lightsalt</a></dd>
         </dl>
       </div>
       <div class="loc-map">
-        <div class="serif" style="font-size:2rem;color:var(--gold);">S · L</div>
+        <div class="serif" style="font-size:2rem;">S · L</div>
         <div>여수시 웅천동<br>갤러리 빛과소금</div>
-        <a href="https://pf.kakao.com/_EzjuX" target="_blank" rel="noopener" class="btn btn-outline" style="margin-top:.4rem;">카카오채널에서 위치 확인 →</a>
+        <a href="https://pf.kakao.com/_EzjuX" target="_blank" rel="noopener" class="btn" style="margin-top:.4rem;">카카오채널에서 위치 확인 →</a>
       </div>
     </div>
   </div>
@@ -343,17 +324,22 @@ footer{padding:3.5rem 0 2.2rem;border-top:1px solid var(--border);}
       <div class="footer-links">
         <a href="https://www.instagram.com/gallery_lightsalt/" target="_blank" rel="noopener">Instagram</a>
         <a href="https://pf.kakao.com/_EzjuX" target="_blank" rel="noopener">KakaoTalk</a>
-        <a href="#hero">TOP ↑</a>
+        <a href="exhibition.html">Exhibition</a>
       </div>
     </div>
     <div class="footer-copy">© 2026 Gallery Sal et Lucem (갤러리 빛과소금) · 여수 웅천동 · MADE BY ONSPOT</div>
   </div>
 </footer>
 
+</div><!-- /mainContent -->
+
 <script>
-window.addEventListener('scroll', function(){
-  var nav = document.getElementById('mainNav');
-  if(window.scrollY > 80){ nav.classList.add('show'); } else { nav.classList.remove('show'); }
+document.getElementById('enterBtn').addEventListener('click', function(){
+  var overlay = document.getElementById('introOverlay');
+  var main = document.getElementById('mainContent');
+  overlay.classList.add('hide');
+  main.classList.add('show');
+  setTimeout(function(){ overlay.style.display='none'; }, 850);
 });
 var revealObs = new IntersectionObserver(function(entries){
   entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); revealObs.unobserve(e.target); } });
